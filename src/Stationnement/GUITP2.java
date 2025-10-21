@@ -15,16 +15,16 @@ public class GUITP2 {
     private JPanel panelNumeros;
     private JPanel panelOperations;
     private JPanel panelComptant;
-    private JTextArea champMessage;
+    private JTextArea champMessage; ////à utiliser
     private JButton bouton25;
     private JButton bouton100;
     private JButton bouton200;
     private JPanel panelCredit;
 
-    private JTextArea zoneRecu;
+    private JTextArea zoneRecu; ////à utiliser
     private JButton boutonRapport;
-    private JFormattedTextField champNumeroCarte;
-    private JFormattedTextField champDateExp;
+    private JFormattedTextField champNumeroCarte;   ////à utiliser
+    private JFormattedTextField champDateExp;       ////à utiliser
     private JButton boutonValiderDateExp;
     private JPanel panelControles;
     private JButton boutonMax;
@@ -43,7 +43,7 @@ public class GUITP2 {
     private EcouteurControles ecouteurControles;
     private EcouteurEntree ecouteurEntree;
 
-    // variables utiles pour vous
+    //// variables utiles pour vous
     String place =""; //place de stationnement choisie
     Borne borne; // borne à créer dans le constructeur
 
@@ -125,8 +125,8 @@ public class GUITP2 {
         boutonAnnuler.addActionListener(ecouteurControles);
         boutonRapport.addActionListener(ecouteurControles);
 
-        //1. créer objet Borne
-
+        ////1. créer objet Borne
+        Borne borne = new Borne();
     }
 
     private void createUIComponents() {
@@ -198,55 +198,67 @@ public class GUITP2 {
         }
     }
 
+    /// À COMPLETER
     public void boutonNumeroLettre_actionPerformed(String lettreChiffre) {
         // 2. À compléter, afficher la place choisie dans le champMessage
         // à partir de la lettre ou du chiffre cliqué en paramètre
         place += lettreChiffre;
-        champMessage.setText(place);
+        champMessage.setText("Votre stationnement : " + place);
     }
 
     private void boutonEntree_actionPerformed() {
-        //3. à coder
+        champMessage.setText("");
+        borne.demarrerTransaction(place); //faire afficher les message de la fonction dans champMessage.setText()
     }
 
-    private void bouton25_actionPerformed() {
+    private void bouton25_actionPerformed() {   /// 25cent
         //4. à coder
+        System.out.println("25 cents");
     }
 
     private void bouton100_actionPerformed() {
         //5. à coder
+        System.out.println("1$");
     }
 
     private void bouton200_actionPerformed() {
         //6. à coder
+        System.out.println("2$");
     }
 
     private void boutonValiderDateExp_actionPerformed(){
         //7. à coder
+        System.out.println("valider date d'expiration");
     }
 
     private void boutonPlus_actionPerformed() {
         //8. à coder
+        System.out.println("bouton +");
     }
 
     private void boutonMoins_actionPerformed(){
         //9. à coder
+        System.out.println("bouton -");
     }
 
     private void boutonMax_actionPerformed() {
         //10. à coder
+        System.out.println("bouton max");
     }
 
     private void boutonOK_actionPerformed() {
         // 11 à coder
+        System.out.println("bouton check");
     }
 
     private void boutonAnnuler_actionPerformed() {
        //12 à coder
+        System.out.println("bouton x rouge");
     }
 
     private void boutonRapport_actionPerformed() {
         //13 à coder
+        System.out.println("bouton rapport");
     }
 
     public static void main(String[] args) {

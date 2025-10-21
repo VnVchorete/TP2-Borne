@@ -1,5 +1,7 @@
 package Stationnement;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.DayOfWeek;
 import java.util.regex.Pattern;
 
@@ -13,7 +15,7 @@ public class Borne {
     private double totalArgentCredit = 0;
     double tarifG = 4.25;
     double tarifSQ = 2.25;
-    private static final Pattern CODE_PATTERN = Pattern.compile("^(G|SQ)\\d{3}$");
+    private static final Pattern Code_Pattern = Pattern.compile("^(G|SQ)\\d{3}$");
 
 //    public Stationnement.Borne(Map<String, Double> tarifs) {
 //        this.tarifs = tarifs;
@@ -21,7 +23,7 @@ public class Borne {
 
     public boolean validerCode(String code) {
         //regex qui vérifie que le nom de la borne est correct
-        return CODE_PATTERN.matcher(code).matches();
+        return Code_Pattern.matcher(code).matches();
     }
 
     public void demarrerTransaction(String code) {
@@ -30,7 +32,7 @@ public class Borne {
         //Vérifie si on est dans les heures payantes pour cette zone (tu devras créer une méthode privée pour ça, ex: estDansPeriodeTarifee(String code)).
         //Si tout est bon, elle crée une nouvelle transaction : this.transactionEnCours = new Stationnement.Transaction(code);
         if (!validerCode(code)) throw new IllegalArgumentException("Code invalide");
-        //if (!estDansPeriodeTarifee(code)) throw new IllegalStateException("Hors période tarifée");    !!!À FIXER LA FONCTION EN BAS!!!!
+        if (!estDansPeriodeTarifee(code)) throw new IllegalStateException("Hors période tarifée");
         this.transactionEnCours = new Transaction(code);
     }
 
@@ -82,7 +84,7 @@ public class Borne {
                 transactionEnCours.getHeureDebut(),
                 transactionEnCours.getHeureFin(),
                 transactionEnCours.getCodeStationnement());
-        transactionEnCours = null;
+                transactionEnCours = null;
         return coupon;
     }
 
@@ -98,42 +100,44 @@ public class Borne {
 //        return report;
 //    }
 
-    /*
-                //  !!À FIXER PLUS TARD !!
+
+    //  !!À FIXER PLUS TARD !!
     private boolean estDansPeriodeTarifee(String code) {
-        // À implémenter selon les heures que tu trouves pour G et SQ dans la carte/énoncé.
-        // Exemple placeholder : always true for dev.
+        LocalDateTime debut = transactionEnCours.getHeureDebut();
+        DayOfWeek jour = debut.getDayOfWeek();
+        LocalTime heure = debut.toLocalTime();
 
-        //verifier code, jours de la semaine, heure,
-        if (transactionEnCours.getCodeStationnement().startsWith("SQ")) {
-            if (transactionEnCours.getHeureDebut().getDayOfWeek() == DayOfWeek.MONDAY
-                    || transactionEnCours.getHeureDebut().getDayOfWeek() == DayOfWeek.TUESDAY
-                    || transactionEnCours.getHeureDebut().getDayOfWeek() == DayOfWeek.TUESDAY
-                    || transactionEnCours.getHeureDebut().getDayOfWeek() == DayOfWeek.WEDNESDAY
-                    || transactionEnCours.getHeureDebut().getDayOfWeek() == DayOfWeek.THURSDAY
-                    || transactionEnCours.getHeureDebut().getDayOfWeek() == DayOfWeek.FRIDAY) {
-                if (transactionEnCours.getHeureDebut().isAfter(8) && transactionEnCours.getHeureDebut().isBefore(23)) { //si cest entre 8 et 23h
-                    //mettre que ca commence a charger par heure
+        if (transactionEnCours.getCodeStationnement().startsWith("G")) {
+            if (jour == DayOfWeek.MONDAY || jour == DayOfWeek.TUESDAY || jour == DayOfWeek.WEDNESDAY
+                    || jour == DayOfWeek.THURSDAY || jour == DayOfWeek.FRIDAY) {
+                if (heure.isAfter(LocalTime.of(8, 0)) && heure.isBefore(LocalTime.of(23, 0))) {
+                    return true;
                 }
-            } else if (transactionEnCours.getHeureDebut().getDayOfWeek() == DayOfWeek.SATURDAY) {
-                if (transactionEnCours.getHeureDebut().isAfter(9) && transactionEnCours.getHeureDebut().isBefore(23)) { //entre 9 et 23h
-                    //commence a chargé par heure
+            } else if (jour == DayOfWeek.SATURDAY) {
+                if (heure.isAfter(LocalTime.of(9, 0)) && heure.isBefore(LocalTime.of(23, 0))) {
+                    return true;
                 }
-            } else if (transactionEnCours.getHeureDebut().getDayOfWeek() == DayOfWeek.SUNDAY) {
-                if (transactionEnCours.getHeureDebut().isAfter(13) && transactionEnCours.getHeureDebut().isBefore(18)) { //entre 9 et 23h//commence a chargé par heure
-
+            } else if (jour == DayOfWeek.SUNDAY) {
+                if (heure.isAfter(LocalTime.of(13, 0)) && heure.isBefore(LocalTime.of(18, 0))) {
+                    return true;
                 }
             }
-        } else {
-            //meme affaire mais pour "B"
+        } else if (transactionEnCours.getCodeStationnement().startsWith("SQ")) {
+            if (jour == DayOfWeek.MONDAY || jour == DayOfWeek.TUESDAY || jour == DayOfWeek.WEDNESDAY
+                    || jour == DayOfWeek.THURSDAY || jour == DayOfWeek.FRIDAY) {
+                if (heure.isAfter(LocalTime.of(9, 0)) && heure.isBefore(LocalTime.of(21, 0))) {
+                    return true;
+                }
+            } else if (jour == DayOfWeek.SATURDAY) {
+                if (heure.isAfter(LocalTime.of(9, 0)) && heure.isBefore(LocalTime.of(18, 0))) {
+                    return true;
+                }
+            }
         }
-
         //entre lundi et ven 8h a 23h - sam 9h a 23h - dim 13h a 18h
-        // transactionEnCours.getHeureDebut().getDayOfWeek().
-        return true;
-    }   */
+        return false;
+    }
 }
-
 
 /*
 * Comment tout ça fonctionne ensemble ?
