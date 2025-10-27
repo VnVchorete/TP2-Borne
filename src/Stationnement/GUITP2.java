@@ -218,22 +218,46 @@ public class GUITP2 {
         }
     }
 
-    private void bouton25_actionPerformed() {   /// 25cent
+    private void bouton25_actionPerformed() {
         //4. à coder
-        Piece piece = new Piece(25);
+        if (borne.getTransactionEnCours() != null) {
+            Piece piece25 = new Piece(25);
+            borne.insererPiece(piece25);
+
+            champMessage.setText(borne.getTransactionEnCours().getDureePayee() + " minutes");
+
+//            //long dureeActuelle = borne.getTransactionEnCours().getHeureFin().getMinute();
+//            if (borne.getTransactionEnCours().getHeureFin().getMinute() < 120) {
+//                Piece piece25 = new Piece(25);
+//                borne.insererPiece(piece25);
+//                champMessage.setText(borne.getTransactionEnCours().getHeureFin().getMinute() + " minutes");
+//            } else {
+//                champMessage.setText("Maximum de 2 heures atteint.");
+//            }
+        } else {
+            champMessage.setText("Veuillez d'abord entrer un code de stationnement valide.");
+        }
+
+//        Piece piece = new Piece(25);
+//        borne.insererPiece(piece);
+//        //Duration temps = Duration.between(heuredebut, heurefin)
+//        champMessage.setText(borne.getTransactionEnCours().getHeureFin().getMinute() + " minutes"); ///à rechecker
+    }
+
+    private void bouton100_actionPerformed() {
+        //5. à coder
+        Piece piece = new Piece(100);
         borne.insererPiece(piece);
         //Duration temps = Duration.between(heuredebut, heurefin)
         champMessage.setText(borne.getTransactionEnCours().getHeureFin().getMinute() + " minutes"); ///à rechecker
     }
 
-    private void bouton100_actionPerformed() {
-        //5. à coder
-        System.out.println("1$");
-    }
-
     private void bouton200_actionPerformed() {
         //6. à coder
-        System.out.println("2$");
+        Piece piece = new Piece(200);
+        borne.insererPiece(piece);
+        //Duration temps = Duration.between(heuredebut, heurefin)
+        champMessage.setText(borne.getTransactionEnCours().getHeureFin().getMinute() + " minutes"); ///à rechecker
     }
 
     private void boutonValiderDateExp_actionPerformed(){
@@ -286,6 +310,23 @@ public class GUITP2 {
         catch ( Exception ex)
         {
             ex.printStackTrace();
+        }
+    }
+
+
+    /// rajouter par après (optionel)
+    private void actualiserAffichageTransaction() {
+        if (borne.getTransactionEnCours() != null) {
+
+            long duree = borne.getTransactionEnCours().getHeureFin().getMinute();
+            double cout = borne.getTransactionEnCours().getCoutTotal();
+            LocalDateTime heureFin = borne.getTransactionEnCours().getHeureFin();
+
+            java.time.format.DateTimeFormatter formatHeure = java.time.format.DateTimeFormatter.ofPattern("HH:mm");
+
+            String message = String.format("Coût actuel: %.2f $\nDurée totale: %d minutes\nHeure de fin: %s", cout, duree, heureFin.format(formatHeure));
+
+            champMessage.setText(message);
         }
     }
 }

@@ -60,12 +60,12 @@ public class Borne {
         //Génère une String qui représente le coupon avec toutes les infos de la transaction. (coupon)
         //this.transactionEnCours = null
 
-        if (transactionEnCours == null) throw new IllegalStateException("Aucune transaction");
-        double montant$ = transactionEnCours.getCoutCents() / 100.0;
-        if (carte.estExpiree()) throw new IllegalStateException("Carte expirée");
-        if (!carte.soldeSuffisant(montant$)) throw new IllegalStateException("Solde insuffisant");
+        if (transactionEnCours == null) throw new IllegalStateException("Aucune transaction"); ///changer ligne
+        double montant$ = transactionEnCours.getCoutTotal() / 100.0;
+        if (carte.estExpiree()) throw new IllegalStateException("Carte expirée"); ///changer ligne
+        if (!carte.soldeSuffisant(montant$)) throw new IllegalStateException("Solde insuffisant"); ///changer ligne
         carte.debiter(montant$);
-        totalArgentCredit += transactionEnCours.getCoutCents();
+        totalArgentCredit += transactionEnCours.getCoutTotal();
         transactionEnCours.setTypePaiement("Crédit");
         return finaliserEtGenererCoupon();
     }
@@ -83,7 +83,7 @@ public class Borne {
         // construire le texte du coupon avec heures, coût, type, code
         String coupon = String.format("Paiement: %s\nCoût: %.2f$\nDébut: %s\nFin: %s\nPlace: %s\n",
                 transactionEnCours.getTypePaiement(),
-                transactionEnCours.getCoutCents() / 100.0,
+                transactionEnCours.getCoutTotal() / 100.0,
                 transactionEnCours.getHeureDebut(),
                 transactionEnCours.getHeureFin(),
                 transactionEnCours.getCodeStationnement());
