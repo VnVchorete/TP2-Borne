@@ -10,7 +10,7 @@ public class Piece {
     //constructeur
     public Piece(int cents) {
         if (cents != CENT_25 && cents != DOLLAR && cents != DOLLAR_2) {
-            throw new IllegalArgumentException("Pièce non acceptée");
+            throw new IllegalArgumentException("Pièce non acceptée"); ///enlever plus tard
         }
         this.cents = cents;
     }

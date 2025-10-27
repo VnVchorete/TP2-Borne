@@ -15,7 +15,7 @@ public class Transaction {
     public Transaction(String codeStationnement) {
         this.codeStationnement = codeStationnement;
         this.heureDebut = LocalDateTime.now();
-        this.heureFin = heureDebut;
+        this.heureFin = heureDebut;     /// créer variable de classe de type long qui garde le total de minutes
         this.coutTotal = 0;
         this.typePaiement = "Inconnu";
     }
@@ -39,7 +39,7 @@ public class Transaction {
         double coutTotalHeures = (newMinutes / 60.0) * tarifHoraire;
         this.coutTotal = (int)Math.round(coutTotalHeures * 100);
 
-        this.heureFin = heureDebut.plusMinutes(newMinutes);
+        this.heureFin = heureFin.plusMinutes(newMinutes);
     }
 
     // getters pour coupon

@@ -17,9 +17,9 @@ public class Borne {
     double tarifSQ = 2.25;
     private static final Pattern Code_Pattern = Pattern.compile("^(G|SQ)\\d{3}$");
 
-//    public Stationnement.Borne(Map<String, Double> tarifs) {
-//        this.tarifs = tarifs;
-//    }
+    public Transaction getTransactionEnCours() {
+        return transactionEnCours;
+    }
 
     public boolean validerCode(String code) {
         //regex qui vérifie que le nom de la borne est correct
@@ -31,15 +31,18 @@ public class Borne {
         //Vérifie si le code est valide
         //Vérifie si on est dans les heures payantes pour cette zone (tu devras créer une méthode privée pour ça, ex: estDansPeriodeTarifee(String code)).
         //Si tout est bon, elle crée une nouvelle transaction : this.transactionEnCours = new Stationnement.Transaction(code);
-        if (!validerCode(code)) throw new IllegalArgumentException("Code invalide");
-        if (!estDansPeriodeTarifee(code)) throw new IllegalStateException("Hors période tarifée");
-        this.transactionEnCours = new Transaction(code);
+        if (!validerCode(code) && !estDansPeriodeTarifee(code)) {
+            code = "";
+        }
+        else {
+            this.transactionEnCours = new Transaction(code);
+        }
     }
 
     public void insererPiece(Piece p) {
         double tarif = 0;
         // Si une transaction est en cours, elle appelle transactionEnCours.ajouterArgent(...) en utilisant la valeur de la pièce et le bon tarif horaire.
-        if (transactionEnCours == null) throw new IllegalStateException("Aucune transaction");
+        if (transactionEnCours == null); //throw new IllegalStateException("Aucune transaction");
         else {
             String zone = transactionEnCours.getCodeStationnement().startsWith("SQ") ? "SQ" : "G";
             if (zone.equals("SQ")) {
@@ -103,11 +106,11 @@ public class Borne {
 
     //  !!À FIXER PLUS TARD !!
     private boolean estDansPeriodeTarifee(String code) {
-        LocalDateTime debut = transactionEnCours.getHeureDebut();
+        LocalDateTime debut = LocalDateTime.now();
         DayOfWeek jour = debut.getDayOfWeek();
         LocalTime heure = debut.toLocalTime();
 
-        if (transactionEnCours.getCodeStationnement().startsWith("G")) {
+        if (code.startsWith("G")) {
             if (jour == DayOfWeek.MONDAY || jour == DayOfWeek.TUESDAY || jour == DayOfWeek.WEDNESDAY
                     || jour == DayOfWeek.THURSDAY || jour == DayOfWeek.FRIDAY) {
                 if (heure.isAfter(LocalTime.of(8, 0)) && heure.isBefore(LocalTime.of(23, 0))) {
@@ -122,7 +125,7 @@ public class Borne {
                     return true;
                 }
             }
-        } else if (transactionEnCours.getCodeStationnement().startsWith("SQ")) {
+        } else if (code.startsWith("SQ")) {
             if (jour == DayOfWeek.MONDAY || jour == DayOfWeek.TUESDAY || jour == DayOfWeek.WEDNESDAY
                     || jour == DayOfWeek.THURSDAY || jour == DayOfWeek.FRIDAY) {
                 if (heure.isAfter(LocalTime.of(9, 0)) && heure.isBefore(LocalTime.of(21, 0))) {

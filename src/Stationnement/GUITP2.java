@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -126,7 +127,7 @@ public class GUITP2 {
         boutonRapport.addActionListener(ecouteurControles);
 
         ////1. créer objet Borne
-        Borne borne = new Borne();
+        this.borne = new Borne();
     }
 
     private void createUIComponents() {
@@ -209,11 +210,20 @@ public class GUITP2 {
     private void boutonEntree_actionPerformed() {
         champMessage.setText("");
         borne.demarrerTransaction(place); //faire afficher les message de la fonction dans champMessage.setText()
+        if (!borne.validerCode(place)) {
+            place = "";
+            champMessage.setText("Le code est invalide");
+        } else {
+            champMessage.setText("Le code est valide" + "\n" + "Inserez de l'argent ou votre carte de crédit");
+        }
     }
 
     private void bouton25_actionPerformed() {   /// 25cent
         //4. à coder
-        System.out.println("25 cents");
+        Piece piece = new Piece(25);
+        borne.insererPiece(piece);
+        //Duration temps = Duration.between(heuredebut, heurefin)
+        champMessage.setText(borne.getTransactionEnCours().getHeureFin().getMinute() + " minutes"); ///à rechecker
     }
 
     private void bouton100_actionPerformed() {
