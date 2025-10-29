@@ -22,7 +22,6 @@ public class Borne {
     }
 
     public boolean validerCode(String code) {
-        //regex qui vérifie que le nom de la borne est correct
         return Code_Pattern.matcher(code).matches();
     }
 
@@ -42,19 +41,17 @@ public class Borne {
     public void insererPiece(Piece p) {
         double tarif = 0;
         // Si une transaction est en cours, elle appelle transactionEnCours.ajouterArgent(...) en utilisant la valeur de la pièce et le bon tarif horaire.
-        if (transactionEnCours == null); //throw new IllegalStateException("Aucune transaction");
-        else {
-            String zone = transactionEnCours.getCodeStationnement().startsWith("SQ") ? "SQ" : "G";
-            if (zone.equals("SQ")) {
-                tarif = tarifSQ;
-            } else {
-                tarif = tarifG;
-            }
-            transactionEnCours.ajouterArgent(p.getCents(), tarif);
-            transactionEnCours.setTypePaiement("Comptant");
+        String zone = transactionEnCours.getCodeStationnement().startsWith("SQ") ? "SQ" : "G";
+        if (zone.equals("SQ")) {
+            tarif = tarifSQ;
+        } else {
+            tarif = tarifG;
         }
+        transactionEnCours.ajouterArgent(p.getCents(), tarif);
+        transactionEnCours.setTypePaiement("Comptant");
     }
 
+    /// fixer car inutile
     public String confirmerTransaction(CarteCredit carte) {
         //Ajoute le coutTotal de la transaction au bon compteur   totalArgentComptant or totalArgentCredit
         //Génère une String qui représente le coupon avec toutes les infos de la transaction. (coupon)
@@ -62,7 +59,7 @@ public class Borne {
 
         if (transactionEnCours == null) throw new IllegalStateException("Aucune transaction"); ///changer ligne
         double montant$ = transactionEnCours.getCoutTotal() / 100.0;
-        if (carte.estExpiree()) throw new IllegalStateException("Carte expirée"); ///changer ligne
+        if (carte.estExpiree(carte)) throw new IllegalStateException("Carte expirée"); ///changer ligne
         if (!carte.soldeSuffisant(montant$)) throw new IllegalStateException("Solde insuffisant"); ///changer ligne
         carte.debiter(montant$);
         totalArgentCredit += transactionEnCours.getCoutTotal();

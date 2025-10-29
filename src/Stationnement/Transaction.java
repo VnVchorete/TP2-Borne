@@ -19,22 +19,31 @@ public class Transaction {
         this.heureFin = heureDebut;     /// créer variable de classe de type long qui garde le total de minutes
         this.coutTotal = 0.0;
         this.typePaiement = "Inconnu";
+        this.dureePayee = 0;
     }
 
-    public void ajouterArgent(double montantAjouteEnDollars, double tarifHoraire) {
+    public void ajouterArgent(double montantAjouteEnCents, double tarifHoraire) {
         this.typePaiement = "Comptant";
+        montantAjouteEnCents /= 100;
         //long dureeActuelle = this.dureeEnMinutes;
-        double heuresAjoutees = montantAjouteEnDollars / tarifHoraire;
-        long minutesAjoutees = Math.round(heuresAjoutees * 60.0);
-        this.dureeEnMinutes += minutesAjoutees;
+        //double heuresAjoutees = montantAjouteEnCents / tarifHoraire;
+        this.dureeEnMinutes = Math.round((montantAjouteEnCents / tarifHoraire) * 60);
+        //long minutesAjoutees = Math.round(heuresAjoutees * 60.0);
+        //this.dureeEnMinutes = Math.round(heuresAjoutees * 60.0);
+
         //this.dureeEnMinutes = Math.min(dureeActuelle + minutesAjoutees, MAX_MINUTES);
 //        if (this.dureeEnMinutes > MAX_MINUTES) {
 //            this.dureeEnMinutes = MAX_MINUTES;
 //        }
         //double heuresTotales = this.dureeEnMinutes / 60.0;
-        this.coutTotal = (this.dureeEnMinutes / 60.0) * tarifHoraire;
-        this.heureFin = this.heureDebut.plusMinutes(this.dureeEnMinutes);
-        this.dureePayee = java.time.Duration.between(heureDebut, heureFin).toMinutes();
+        //this.coutTotal = this.dureeEnMinutes * tarifHoraire;
+        if (this.dureeEnMinutes >= MAX_MINUTES || this.dureePayee >= MAX_MINUTES) { /// simplifier ou pas jsp
+            this.dureePayee = MAX_MINUTES;
+            this.heureFin = this.heureDebut.plusMinutes(MAX_MINUTES);
+        } else {
+            this.heureFin = this.heureDebut.plusMinutes(this.dureeEnMinutes);
+            this.dureePayee += java.time.Duration.between(heureDebut, heureFin).toMinutes();    ///pas sur sur
+        }
 
 //        this.coutTotal += montantAjouteEnDollars;
 //        this.typePaiement = "Comptant";

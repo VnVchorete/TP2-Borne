@@ -1,31 +1,29 @@
 package Stationnement;
 
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.Random;
 
 public class CarteCredit {
     private final String numCarte;
-    private final LocalDateTime dateExpiration; // = "mm/aa";
+    private final YearMonth dateExpiration; // = "mm/aa";
     private double solde;
 
-    //solde random
     public CarteCredit(String numCarte, String mmaa) {  //regex pour faire 4 champ * 4
         this.numCarte = numCarte;
-        this.dateExpiration = LocalDateTime.parse(mmaa);
+        this.dateExpiration = YearMonth.now();
         this.solde = new Random().nextDouble() * 200.0;
     }
 
-//    private YearMonth parseMmAa(String mmAa) {
-//        String[] parts = mmAa.split("/");
-//        int mm = Integer.parseInt(parts[0]);
-//        int aa = Integer.parseInt(parts[1]);
-//        int fullYear = 2000 + aa;
-//        return YearMonth.of(fullYear, mm);
-//    }
-
-    public boolean estExpiree() {   //pas fini
-        return LocalDateTime.now().isAfter(dateExpiration);
+    private YearMonth parseMmAa(String mmaa) {
+        String[] parts = mmaa.split("/");
+        int mm = Integer.parseInt(parts[0]);
+        int aa = Integer.parseInt(parts[1]);
+        int fullYear = 2000 + aa;
+        return YearMonth.of(fullYear, mm);
     }
+
+    public boolean estExpiree(CarteCredit carte) { return YearMonth.now().isBefore(dateExpiration);}
 
     public boolean soldeSuffisant(double montant) {
         return solde >= montant;

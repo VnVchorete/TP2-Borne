@@ -246,18 +246,32 @@ public class GUITP2 {
 
     private void bouton100_actionPerformed() {
         //5. à coder
-        Piece piece = new Piece(100);
-        borne.insererPiece(piece);
-        //Duration temps = Duration.between(heuredebut, heurefin)
-        champMessage.setText(borne.getTransactionEnCours().getHeureFin().getMinute() + " minutes"); ///à rechecker
+        if (borne.getTransactionEnCours() != null) {
+            Piece piece100 = new Piece(100);
+            borne.insererPiece(piece100);
+            champMessage.setText(borne.getTransactionEnCours().getDureePayee() + " minutes");
+        } else {
+            champMessage.setText("Veuillez d'abord entrer un code de stationnement valide.");
+        }
+//        Piece piece = new Piece(100);
+//        borne.insererPiece(piece);
+//        //Duration temps = Duration.between(heuredebut, heurefin)
+//        champMessage.setText(borne.getTransactionEnCours().getHeureFin().getMinute() + " minutes"); ///à rechecker
     }
 
     private void bouton200_actionPerformed() {
         //6. à coder
-        Piece piece = new Piece(200);
-        borne.insererPiece(piece);
-        //Duration temps = Duration.between(heuredebut, heurefin)
-        champMessage.setText(borne.getTransactionEnCours().getHeureFin().getMinute() + " minutes"); ///à rechecker
+        if (borne.getTransactionEnCours() != null) {
+            Piece piece200 = new Piece(200);
+            borne.insererPiece(piece200);
+            champMessage.setText(borne.getTransactionEnCours().getDureePayee() + " minutes");
+        } else {
+            champMessage.setText("Veuillez d'abord entrer un code de stationnement valide.");
+        }
+//        Piece piece = new Piece(200);
+//        borne.insererPiece(piece);
+//        //Duration temps = Duration.between(heuredebut, heurefin)
+//        champMessage.setText(borne.getTransactionEnCours().getHeureFin().getMinute() + " minutes"); ///à rechecker
     }
 
     private void boutonValiderDateExp_actionPerformed(){
